@@ -31,14 +31,14 @@ class AuthenticatedSessionController extends Controller
     {
         $user = $request->authenticate();
 
-        AuditLogService::log('Đã đăng nhập vào hệ thống', 'auth', $user, $user);
-
         $accessToken  = $this->jwtService->generateAccessToken($user);
         $refreshToken = $this->jwtService->generateRefreshToken($user);
 
         // Save refresh token to DB
         $user->refresh_token = $refreshToken;
-        $user->save();
+        $user->saveQuietly();
+
+        AuditLogService::log('Đã đăng nhập vào hệ thống', $user, 'auth', $user);
 
         return redirect()->intended(route('dashboard', absolute: false))
             ->withCookies([
@@ -61,13 +61,12 @@ class AuthenticatedSessionController extends Controller
                 JWTAuth::setToken($accessToken)->invalidate();
             }
 
-            if ($user) {
+            if ($user instanceof User) {
                 // Remove refresh token to DB
                 $user->refresh_token = null;
-                $user->save();
+                $user->saveQuietly();
 
-                AuditLogService::log('Đã đăng xuất khỏi hệ thống', 'auth', $user, $user);
-
+                AuditLogService::log('Đã đăng xuất khỏi hệ thống', $user, 'auth', $user);
             }
         } catch (Exception $e) {
             Log::error("Logout error: " . $e->getMessage());

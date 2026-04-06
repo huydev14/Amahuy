@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditLogService
 {
-    public static function log($description, $model, $logName = 'audit') {
+    public static function log($description, $model = null, $logName = 'audit', ?Model $causer = null) {
 
-        $causer = Auth::user();
+        $causer = $causer ?? Auth::user();
 
         $properties = [
             'ip' => request()->ip(),
