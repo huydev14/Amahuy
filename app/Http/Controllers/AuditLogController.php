@@ -32,12 +32,12 @@ class AuditLogController extends Controller
                     if (!$log->subject_type) return 'N/A';
 
                     $modelName = class_basename($log->subject_type);
-                    return '<span class="tw-text-xs tw-font-mono tw-bg-gray-100 tw-px-1.5 tw-py-0.5 tw-rounded">
+                    return '<span class="tw-text-xs tw-font-mono tw-bg-gray-100 tw-px-1.5 tw-py-0.5 tw-rounded-sm">
                             ' . $modelName . ' #' . $log->subject_id . '
                             </span>';
                 })
-                ->editColumn('session_id', function ($log) {
-                    return $log->getExtraProperty('session_id');
+                ->editColumn('ip_address', function ($log) {
+                    return $log->getExtraProperty('ip');
                 })
                 ->addColumn('details', function ($log) {
                     if (!empty($log->properties->all())) {
@@ -81,8 +81,6 @@ class AuditLogController extends Controller
                     'text' => $user->name
                 ];
             })->values();
-
-
 
         return response()->json([
             'logNameData' => $logNameData,

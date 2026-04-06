@@ -32,11 +32,11 @@
                 <thead>
                     <tr>
                         <th>Thời gian</th>
-                        <th>Phân hệ</th>
                         <th>Actor / Causer</th>
-                        <th>Action / Event</th>
+                        <th>Description</th>
                         <th>Target</th>
-                        <th>Session ID</th>
+                        <th>Phân hệ</th>
+                        <th>IP Address</th>
                         <th>Details</th>
                     </tr>
                 </thead>
@@ -61,10 +61,6 @@
                             name: 'created_at',
                         },
                         {
-                            data: 'log_name',
-                            name: 'log_name',
-                        },
-                        {
                             data: 'causer_name',
                             name: 'causer_name',
                         },
@@ -77,8 +73,12 @@
                             name: 'subject_id',
                         },
                         {
-                            data: 'session_id',
-                            name: 'session_id',
+                            data: 'log_name',
+                            name: 'log_name',
+                        },
+                        {
+                            data: 'ip_address',
+                            name: 'ip_address',
                             orderable: false,
                         },
                         {
@@ -132,10 +132,10 @@
                 });
 
                 $('#f_logName, #f_causer').select2({
-                theme: 'bootstrap4',
-                minimumResultsForSearch: 10,
-                width: '100%',
-            });
+                    theme: 'bootstrap4',
+                    minimumResultsForSearch: 10,
+                    width: '100%',
+                });
             });
         </script>
     @endpush

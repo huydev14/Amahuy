@@ -13,7 +13,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        AuditLogService::log('Tạo mới nhân sự: ' . $user->name . '(' . $user->id . ')', $user, 'user');
+        AuditLogService::log('Tạo mới nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
     }
 
     /**
@@ -21,7 +21,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        AuditLogService::log('Cập nhật hồ sơ nhân sự: ' . $user->name . '(' . $user->id . ')', $user, 'user');
+        AuditLogService::log('Cập nhật hồ sơ nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
     }
 
     /**
@@ -29,7 +29,7 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        AuditLogService::log('Xóa nhân sự: ' . $user->name . '(' . $user->id . ')', $user, 'user');
+        AuditLogService::log('Xóa nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
     }
 
     /**
@@ -37,7 +37,7 @@ class UserObserver
      */
     public function restored(User $user): void
     {
-        AuditLogService::log('Khôi phục nhân sự: ' . $user->name . '(' . $user->id . ')', $user, 'user');
+        AuditLogService::log('Khôi phục nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
     }
 
     /**
