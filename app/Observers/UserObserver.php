@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Services\AuditLogService;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class UserObserver
 {
@@ -13,7 +13,11 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        AuditLogService::log('Tạo mới nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
+        AuditLogService::log(
+            "Tạo mới nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')",
+            $user,
+            'user_profile'
+        );
     }
 
     /**
@@ -21,7 +25,22 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        AuditLogService::log('Cập nhật hồ sơ nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
+        $newData = $user->getChanges();
+
+        $oldData = Arr::only($user->getOriginal(), array_keys($newData));
+
+        $properties = [
+            'old' => $oldData,
+            'new' => $newData,
+        ];
+
+        AuditLogService::log(
+            "Cập nhật hồ sơ nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')",
+            $user,
+            'user_profile',
+            $user,
+            $properties
+        );
     }
 
     /**
@@ -29,7 +48,11 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        AuditLogService::log('Xóa nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
+        AuditLogService::log(
+            "Xóa nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')",
+            $user,
+            'user_profile'
+        );
     }
 
     /**
@@ -37,7 +60,11 @@ class UserObserver
      */
     public function restored(User $user): void
     {
-        AuditLogService::log('Khôi phục nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')', $user, 'user_profile');
+        AuditLogService::log(
+            "Khôi phục nhân sự: ' . $user->name . ' (ID: ' . $user->id . ')",
+            $user,
+            'user_profile'
+        );
     }
 
     /**
