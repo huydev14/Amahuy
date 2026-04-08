@@ -42,12 +42,59 @@
 
         <hr class="tw-border-gray-200">
 
-        <h4 class="tw-text-sm tw-font-bold tw-text-gray-800 tw-mb-4 tw-flex tw-items-center tw-gap-2">
-            <i class="fas fa-exchange-alt tw-text-blue-800"></i> Lịch sử thay đổi dữ liệu
-        </h4>
+        <div>
+            <h4 class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-font-bold tw-text-gray-800 tw-mb-2">
+                <i class="fas fa-exchange-alt tw-text-blue-800"></i> Lịch sử thay đổi dữ liệu
+            </h4>
+            @php
+                $oldData = $activity->getExtraProperty('old') ?? [];
+                $newData = $activity->getExtraProperty('new') ?? [];
 
-        <div id="logChangesContainer" class="tw-space-y-3">
-            <p class="tw-text-sm tw-text-gray-500 tw-italic">Không có thay đổi</p>
+                $allKeys = array_unique(array_merge(array_keys($oldData), array_keys($newData)));
+
+                $filteredKeys = array_filter($allKeys, function ($key) {
+                    return $key !== 'updated_at';
+                });
+            @endphp
+
+            @if (empty($filteredKeys))
+                <div id="logChangesContainer" class="tw-space-y-2">
+                    <p class="tw-text-sm tw-text-gray-500 tw-italic">Không có trường dữ liệu nào bị thay đổi.</p>
+                </div>
+            @else
+                <div class="tw-space-y-2">
+                    @foreach ($filteredKeys as $key)
+                        @php
+                            $oldVal = array_key_exists($key, $oldData) ? $oldData[$key] : null;
+                            $newVal = array_key_exists($key, $newData) ? $newData[$key] : null;
+                        @endphp
+
+                        <span class="tw-w-full tw-text-xs tw-font-bold tw-text-gray-600 tw-capitalize">
+                            {{ $key }}:
+                        </span>
+
+                        <br>
+
+                        <div class="tw-flex tw-flex-row tw-gap-2 tw-items-center">
+                            <span class="tw-p-1 tw-bg-gray-100 tw-break-all tw-overflow-y-auto tw-text-xs">
+                                @if ($oldVal === null || $oldVal === '')
+                                    Trống
+                                @endif
+                                {{ $oldVal }}
+                            </span>
+
+                            <i class="fas fa-arrow-right tw-text-gray-400 tw-text-sm"></i>
+
+                            <span class="tw-p-1 tw-bg-green-100 tw-text-green-700 tw-break-all tw-overflow-y-auto tw-text-xs">
+                                @if ($newVal === null || $newVal === '')
+                                    Trống
+                                @endif
+                                {{ $newVal }}
+                                </span>
+                            </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <hr class="tw-border-gray-200">
