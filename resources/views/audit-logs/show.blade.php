@@ -48,7 +48,7 @@
             </h4>
             @php
                 $oldData = $activity->getExtraProperty('old') ?? [];
-                $newData = $activity->getExtraProperty('new') ?? [];
+                $newData = $activity->getExtraProperty('attributes') ?? [];
 
                 $allKeys = array_unique(array_merge(array_keys($oldData), array_keys($newData)));
 
@@ -85,13 +85,14 @@
 
                             <i class="fas fa-arrow-right tw-text-gray-400 tw-text-sm"></i>
 
-                            <span class="tw-p-1 tw-bg-green-100 tw-text-green-700 tw-break-all tw-overflow-y-auto tw-text-xs">
+                            <span
+                                class="tw-p-1 tw-bg-green-100 tw-text-green-700 tw-break-all tw-overflow-y-auto tw-text-xs">
                                 @if ($newVal === null || $newVal === '')
                                     Trống
                                 @endif
                                 {{ $newVal }}
-                                </span>
-                            </div>
+                            </span>
+                        </div>
                     @endforeach
                 </div>
             @endif

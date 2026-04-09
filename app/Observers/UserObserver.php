@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\User;
 use App\Services\AuditLogService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class UserObserver
 {
@@ -31,14 +32,14 @@ class UserObserver
 
         $properties = [
             'old' => $oldData,
-            'new' => $newData,
+            'attributes' => $newData,
         ];
 
         AuditLogService::log(
             "Cập nhật hồ sơ nhân sự: $user->name (ID: $user->id)",
             $user,
             'user_profile',
-            $user,
+            Auth::user(),
             $properties
         );
     }
@@ -63,7 +64,8 @@ class UserObserver
         AuditLogService::log(
             "Khôi phục nhân sự: $user->name (ID: $user->id)",
             $user,
-            'user_profile'
+            'user_profile',
+            Auth::user(),
         );
     }
 
