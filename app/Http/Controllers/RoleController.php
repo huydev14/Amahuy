@@ -59,6 +59,8 @@ class RoleController extends Controller
 
             AuditLogService::log("Tạo mới vai trò: {$role->name}", $role, 'role', Auth::user());
 
+            session()->flash('success', 'Tạo thành công');
+
             return response()->json([
                 'success' => true,
                 'msg' => 'Tạo vai trò mới thành công',
