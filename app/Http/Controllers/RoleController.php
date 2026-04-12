@@ -57,9 +57,7 @@ class RoleController extends Controller
 
             DB::commit();
 
-            AuditLogService::log("Tạo mới vai trò: {$role->name}", $role, 'role', Auth::user());
-
-            session()->flash('success', 'Tạo thành công');
+            session()->flash('success', 'Tạo mới vai trò thành công');
 
             return response()->json([
                 'success' => true,
@@ -110,28 +108,40 @@ class RoleController extends Controller
 
         DB::beginTransaction();
         try {
-            $oldData = $role->toArray();
+            $oldName = $role->name;
+            $oldPermissions = $role->permissions->pluck('name')->toArray();
 
             $role->update([
                 'name' => $request->name,
                 'description' => $request->description,
             ]);
 
-            $permissions = $request->permissions ?? [];
-            $role->syncPermissions($permissions);
+            $newPermissions = $request->permissions ?? [];
+            $role->syncPermissions($newPermissions);
 
             DB::commit();
 
-            AuditLogService::log(
-                "Cập nhật vai trò: {$role->name}",
-                $role,
-                'role',
-                Auth::user(),
-                [
-                    'old' => $oldData,
-                    'attributes' => $permissions,
-                ]
-            );
+            $changes = [];
+            if ($oldName !== $role->name) {
+                $changes['name'] = [
+                    'old' => $oldName,
+                    'new' => $role->name,
+                ];
+            }
+
+            $addedPermissions = array_values(array_diff($newPermissions, $oldPermissions));
+            if (!empty($addedPermissions)) {
+                $changes['permissions_added'] = $addedPermissions;
+            }
+
+            $removedPermissions = array_values(array_diff($oldPermissions, $newPermissions));
+            if (!empty($removedPermissions)) {
+                $changes['permissions_removed'] = $removedPermissions;
+            }
+
+            AuditLogService::log("Cập nhật vai trò: {$role->name}", $role, 'role', Auth::user(), $changes);
+
+            session()->flash('success', 'Cập nhật vai trò thành công');
 
             return response()->json([
                 'success' => true,
@@ -159,27 +169,21 @@ class RoleController extends Controller
         DB::beginTransaction();
 
         try {
-            $roleName = $role->name;
             $role->delete();
             DB::commit();
 
-            AuditLogService::log(
-                "Xoá vai trò: {$roleName}",
-                $role,
-                'role',
-                Auth::user()
-            );
+            session()->flash('success', 'Xoá vai trò thành công');
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Đã xóa vai trò thành công!'
+                'msg' => 'Đã xóa vai trò thành công!'
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Delete role failed:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return response()->json([
                 'status' => 'error',
-                'message' => 'Không thể xóa vai trò này!'
+                'msg' => 'Không thể xóa vai trò này!'
             ], 500);
         }
     }
