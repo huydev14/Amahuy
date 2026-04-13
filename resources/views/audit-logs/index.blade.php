@@ -144,7 +144,7 @@
                     });
 
                 $('#audit-log-table').on('click', '.view-log-btn', function() {
-                    ModalHelper.open('logDetailModal')
+                    ModalHelper.open('modal')
                     $('#audit-logs-content').html(loadingHtml);
 
                     const showUrl = $(this).data('show-url');
