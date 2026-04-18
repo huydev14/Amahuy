@@ -1,0 +1,272 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use App\Models\ProductVariant;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
+
+class ProductVariantController extends Controller
+{
+    public function index()
+    {
+        return view('product-variants.index');
+    }
+
+    public function data(Request $request)
+    {
+        if ($request->ajax()) {
+            $variants = ProductVariant::with('product')->select('product_variants.*');
+            $this->applyFilters($variants, $request);
+
+            return DataTables::of($variants)
+                ->addColumn('product_name', function ($variant) {
+                    return $variant->product?->name ?? '<span class="tw-text-gray-400 tw-italic tw-text-sm">---</span>';
+                })
+                ->editColumn('price', function ($variant) {
+                    return $this->formatVnd($variant->price);
+                })
+                ->editColumn('compare_at_price', function ($variant) {
+                    return $this->formatNullableVnd($variant->compare_at_price);
+                })
+                ->editColumn('cost_price', function ($variant) {
+                    return $this->formatNullableVnd($variant->cost_price);
+                })
+                ->editColumn('is_active', function ($variant) {
+                    return $this->renderStatusBadge($variant->is_active);
+                })
+                ->editColumn('updated_at', function ($variant) {
+                    return $variant->updated_at ? $variant->updated_at->format('d/m/Y') : '';
+                })
+                ->editColumn('action', function ($variant) {
+                    return view('product-variants._product-variants-action', compact('variant'))->render();
+                })
+                ->rawColumns(['product_name', 'compare_at_price', 'cost_price', 'is_active', 'action'])
+                ->make(true);
+        }
+    }
+
+    private function applyFilters($query, Request $request): void
+    {
+        if ($request->filled('product_id')) {
+            $query->where('product_variants.product_id', $request->product_id);
+        }
+
+        if ($request->filled('is_active')) {
+            $query->where('product_variants.is_active', $request->is_active);
+        }
+    }
+
+    private function formatVnd($value): string
+    {
+        return number_format((float) $value, 0, ',', '.') . ' VND';
+    }
+
+    private function formatNullableVnd($value): string
+    {
+        if ($value === null) {
+            return '<span class="tw-text-gray-400 tw-italic tw-text-sm">---</span>';
+        }
+
+        return $this->formatVnd($value);
+    }
+
+    private function renderStatusBadge(bool $isActive): string
+    {
+        if ($isActive) {
+            return '<span class="tw-px-2 tw-py-1 tw-bg-green-100 tw-text-green-700 tw-text-xs tw-font-medium tw-rounded-full">' . __('product_variant.status.active') . '</span>';
+        }
+
+        return '<span class="tw-px-2 tw-py-1 tw-bg-gray-100 tw-text-gray-600 tw-text-xs tw-font-medium tw-rounded-full">' . __('product_variant.status.hidden') . '</span>';
+    }
+
+    public function getFilterData(Request $request)
+    {
+        $status = collect([
+            ['id' => 1, 'text' => __('product_variant.status.active')],
+            ['id' => 0, 'text' => __('product_variant.status.inactive')],
+        ]);
+
+        $products = Product::select('id', 'name as text')->orderBy('name')->get();
+        $variants = ProductVariant::select('id', 'sku as text')->orderBy('sku')->get();
+
+        return response()->json([
+            'status' => $status,
+            'products' => $products,
+            'variants' => $variants,
+        ]);
+    }
+
+    public function create()
+    {
+        $products = Product::orderBy('name')->get();
+
+        return view('product-variants.create', compact('products'));
+    }
+
+    public function store(Request $request)
+    {
+        $attributesJson = $request->input('attributes');
+
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'sku' => 'required|string|max:100|unique:product_variants,sku',
+            'barcode' => 'nullable|string|max:255|unique:product_variants,barcode',
+            'price' => 'required|numeric|min:0',
+            'compare_at_price' => 'nullable|numeric|min:0',
+            'cost_price' => 'nullable|numeric|min:0',
+            'attributes' => 'nullable|json',
+            'position' => 'nullable|integer|min:0',
+        ], [
+            'product_id.required' => __('product_variant.validation.product_required'),
+            'sku.required' => __('product_variant.validation.sku_required'),
+            'sku.unique' => __('product_variant.validation.sku_unique'),
+            'barcode.unique' => __('product_variant.validation.barcode_unique'),
+            'price.required' => __('product_variant.validation.price_required'),
+            'attributes.json' => __('product_variant.validation.attributes_json'),
+        ]);
+
+        try {
+            ProductVariant::create([
+                'product_id' => $request->product_id,
+                'sku' => $request->sku,
+                'barcode' => $request->barcode,
+                'price' => $request->price,
+                'compare_at_price' => $request->compare_at_price,
+                'cost_price' => $request->cost_price,
+                'attributes' => $attributesJson ? json_decode($attributesJson, true) : null,
+                'position' => $request->filled('position') ? $request->position : 0,
+                'is_active' => $request->has('is_active'),
+            ]);
+
+            if ($request->ajax()) {
+                session()->flash('success', __('product_variant.messages.create_success'));
+
+                return response()->json([
+                    'success' => true,
+                    'msg' => __('product_variant.messages.create_success'),
+                ], 200);
+            }
+
+            return redirect()->route('product-variants.index')->with('success', __('product_variant.messages.create_success'));
+        } catch (Exception $e) {
+            Log::error('Create product variant failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'msg' => __('product_variant.messages.system_error'),
+            ], 500);
+        }
+    }
+
+    public function edit(ProductVariant $product_variant)
+    {
+        $products = Product::orderBy('name')->get();
+
+        return view('product-variants.edit', [
+            'variant' => $product_variant,
+            'products' => $products,
+        ]);
+    }
+
+    public function update(Request $request, ProductVariant $product_variant)
+    {
+        $attributesJson = $request->input('attributes');
+
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'sku' => 'required|string|max:100|unique:product_variants,sku,' . $product_variant->id,
+            'barcode' => 'nullable|string|max:255|unique:product_variants,barcode,' . $product_variant->id,
+            'price' => 'required|numeric|min:0',
+            'compare_at_price' => 'nullable|numeric|min:0',
+            'cost_price' => 'nullable|numeric|min:0',
+            'attributes' => 'nullable|json',
+            'position' => 'nullable|integer|min:0',
+        ], [
+            'product_id.required' => __('product_variant.validation.product_required'),
+            'sku.required' => __('product_variant.validation.sku_required'),
+            'sku.unique' => __('product_variant.validation.sku_unique'),
+            'barcode.unique' => __('product_variant.validation.barcode_unique'),
+            'price.required' => __('product_variant.validation.price_required'),
+            'attributes.json' => __('product_variant.validation.attributes_json'),
+        ]);
+
+        try {
+            $product_variant->update([
+                'product_id' => $request->product_id,
+                'sku' => $request->sku,
+                'barcode' => $request->barcode,
+                'price' => $request->price,
+                'compare_at_price' => $request->compare_at_price,
+                'cost_price' => $request->cost_price,
+                'attributes' => $attributesJson ? json_decode($attributesJson, true) : null,
+                'position' => $request->filled('position') ? $request->position : 0,
+                'is_active' => $request->has('is_active'),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'msg' => __('product_variant.messages.update_success'),
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('Update product variant failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('product_variant.messages.system_error'),
+            ], 500);
+        }
+    }
+
+    public function destroy(ProductVariant $product_variant)
+    {
+        try {
+            $product_variant->delete();
+
+            return response()->json([
+                'success' => true,
+                'status' => 200,
+                'msg' => __('product_variant.messages.delete_success'),
+            ]);
+        } catch (Exception $e) {
+            Log::error('Delete product variant failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('product_variant.messages.system_error'),
+            ], 500);
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $variant = ProductVariant::withTrashed()->findOrFail($id);
+            $variant->restore();
+
+            return response()->json([
+                'success' => true,
+                'msg' => __('product_variant.messages.restore_success'),
+            ]);
+        } catch (Exception $e) {
+            Log::error('Restore product variant failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('product_variant.messages.restore_error'),
+            ], 500);
+        }
+    }
+}
+

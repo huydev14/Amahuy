@@ -9,7 +9,7 @@
         </li>
 
         {{-- Bán hàng --}}
-        <li class="nav-item menu-open {{ request()->routeIs('brands.*') || request()->routeIs('categories.*') || request()->routeIs('products.*') ? 'menu-is-opening ' : '' }}">
+        <li class="nav-item menu-open {{ request()->routeIs('brands.*') || request()->routeIs('categories.*') || request()->routeIs('products.*') || request()->routeIs('product-variants.*') ? 'menu-is-opening ' : '' }}">
             <a href="#" class="nav-link">
                 <x-icon-shopping class="nav-icon" />
                 <p> Bán hàng
@@ -30,6 +30,11 @@
                 <li class="nav-item">
                     <a href="{{ route('products.index') }}" class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}">
                         <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('product-variants.index') }}" class="nav-link {{ request()->routeIs('product-variants.index') ? 'active' : '' }}">
+                        <p>Product Variants</p>
                     </a>
                 </li>
                 {{-- ---<li class="nav-item">

@@ -6,7 +6,7 @@ const loadingHtml = `
 `;
 
 $(
-    '#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_categoryName, #f_isActive, #f_productName, #f_category, #f_brand',
+    '#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_categoryName, #f_isActive, #f_productName, #f_category, #f_brand, #f_product'
 ).select2({
     theme: 'bootstrap4',
     minimumResultsForSearch: 5,

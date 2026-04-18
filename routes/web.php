@@ -9,6 +9,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 
 require __DIR__ . '/auth.php';
 
@@ -79,4 +80,12 @@ Route::middleware('jwt.cookie')->group(function () {
         Route::post('/{id}/restore', [ProductController::class, 'restore'])->name('restore');
     });
     Route::resource('products', ProductController::class);
+
+    // --- Product variants --------------------------
+    Route::prefix('product-variants')->name('product-variants.')->group(function () {
+        Route::get('/data', [ProductVariantController::class, 'data'])->name('data');
+        Route::get('/filter-data', [ProductVariantController::class, 'getFilterData'])->name('filter_data');
+        Route::post('/{id}/restore', [ProductVariantController::class, 'restore'])->name('restore');
+    });
+    Route::resource('product-variants', ProductVariantController::class);
 });

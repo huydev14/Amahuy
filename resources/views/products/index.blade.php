@@ -52,6 +52,24 @@
     @push('scripts')
         <script src="{{ asset('js/pages/product.js') }}"></script>
         <script>
+            $(function() {
+                @if (session('success'))
+                    fluentToast({
+                        type: 'success',
+                        title: @json(__('product.js.toast.success_title')),
+                        description: "{{ session('success') }}",
+                        subtitle: @json(__('product.js.code_prefix')) + ' 200',
+                        actionType: 'close',
+                    });
+                @endif
+
+                $('#category_id, #brand_id').select2({
+                    theme: 'bootstrap4',
+                    minimumResultsForSearch: 5,
+                    width: '100%',
+                });
+            });
+
             window.ProductRoutes = {
                 data: "{{ route('products.data') }}",
                 filterData: "{{ route('products.filter_data') }}",
@@ -77,18 +95,6 @@
                 codePrefix: @json(__('product.js.code_prefix')),
                 successTitle: @json(__('product.js.toast.success_title')),
             };
-
-            $(function() {
-                @if (session('success'))
-                    fluentToast({
-                        type: 'success',
-                        title: @json(__('product.js.toast.success_title')),
-                        description: "{{ session('success') }}",
-                        subtitle: @json(__('product.js.code_prefix')) + ' 200',
-                        actionType: 'close',
-                    });
-                @endif
-            });
         </script>
     @endpush
 @endsection
