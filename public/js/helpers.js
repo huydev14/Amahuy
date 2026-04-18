@@ -5,7 +5,7 @@ const loadingHtml = `
     </div>
 `;
 
-$('#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_isActive').select2({
+$('#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_categoryName, #f_isActive').select2({
     theme: 'bootstrap4',
     minimumResultsForSearch: 8,
     width: '100%',

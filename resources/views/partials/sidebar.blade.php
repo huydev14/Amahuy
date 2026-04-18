@@ -9,7 +9,7 @@
         </li>
 
         {{-- Bán hàng --}}
-        <li class="nav-item menu-open {{ request()->routeIs('brands.*') ? 'menu-is-opening ' : '' }}">
+        <li class="nav-item menu-open {{ request()->routeIs('brands.*') || request()->routeIs('categories.*') ? 'menu-is-opening ' : '' }}">
             <a href="#" class="nav-link">
                 <x-icon-shopping class="nav-icon" />
                 <p> Bán hàng
@@ -22,12 +22,12 @@
                         <p>Thương hiệu</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="pages/UI/general.html" class="nav-link">
-                        <p>Phiếu hàng</p>
+                 <li class="nav-item">
+                    <a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}">
+                        <p>Categories</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- ---<li class="nav-item">
                     <a href="pages/UI/icons.html" class="nav-link">
                         <p>Tồn kho</p>
                     </a>

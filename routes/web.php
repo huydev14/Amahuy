@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 
 require __DIR__ . '/auth.php';
 
@@ -61,4 +62,12 @@ Route::middleware('jwt.cookie')->group(function () {
         Route::post('/{id}/restore', [BrandController::class, 'restore'])->name('restore');
     });
     Route::resource('brands', BrandController::class);
+
+    // --- Categories -------------------------------
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('/data', [CategoryController::class, 'data'])->name('data');
+        Route::get('/filter-data', [CategoryController::class, 'getFilterData'])->name('filter_data');
+        Route::post('/{id}/restore', [CategoryController::class, 'restore'])->name('restore');
+    });
+    Route::resource('categories', CategoryController::class);
 });
