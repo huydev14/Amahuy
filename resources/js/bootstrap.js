@@ -7,7 +7,7 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribut
 
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
-window.$.ajaxSetup({
+window.$?.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': csrfToken,
     },

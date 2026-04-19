@@ -89,3 +89,8 @@ Route::middleware('jwt.cookie')->group(function () {
     });
     Route::resource('product-variants', ProductVariantController::class);
 });
+
+// VueJS client
+Route::get('/client/{any?}', function() {
+    return view('client.index');
+})->where('any', '.*');

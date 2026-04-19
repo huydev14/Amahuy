@@ -9,9 +9,10 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/vite": "^4.0.0",
+        "@vitejs/plugin-vue": "^6.0.6",
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
-        "axios": "^1.11.0",
+        "axios": "^1.15.0",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.0",
         "postcss": "^8.4.31",
@@ -25,6 +26,9 @@
         "datatables.net": "^2.3.7",
         "datatables.net-bs4": "^2.3.7",
         "flag-icons": "^7.5.0",
-        "jquery": "^3.7.1"
+        "jquery": "^3.7.1",
+        "pinia": "^3.0.4",
+        "vue": "^3.5.32",
+        "vue-router": "^5.0.4"
     }
 }
