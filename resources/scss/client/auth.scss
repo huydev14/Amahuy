@@ -1,0 +1,253 @@
+/* resources/css/client/auth.scss */
+
+// ==========================================
+// 1. BIẾN (VARIABLES)
+// ==========================================
+$font-family-base: 'Amazon Ember', Arial, sans-serif;
+$color-text-main: #0f1111;
+$color-text-muted: #767676;
+$color-white: #fff;
+
+$color-link: #0066c0;
+$color-link-hover: #c45500;
+$color-error: #c40000;
+
+$color-btn-primary: #f0c14b;
+$color-btn-primary-hover: #f4d078;
+$color-btn-secondary: #e7e9ec;
+$color-btn-secondary-hover: #d3d6db;
+
+$color-input-border: #a6a6a6;
+$color-input-focus: #e77600;
+
+// ==========================================
+// 2. LAYOUT & TYPOGRAPHY
+// ==========================================
+.amazon-login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color-white;
+    min-height: 100vh;
+    font-family: $font-family-base;
+    color: $color-text-main;
+    padding-top: 14px;
+}
+
+.logo-container {
+    margin-bottom: 18px;
+
+    .logo-link {
+        text-decoration: none;
+    }
+
+    .logo-text {
+        font-size: 28px;
+        font-weight: bold;
+        color: #000;
+    }
+}
+
+.login-box {
+    width: 350px;
+    padding: 20px 26px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: $color-white;
+}
+
+.login-title {
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+
+// ==========================================
+// 3. THÔNG BÁO LỖI (ALERTS)
+// ==========================================
+.a-alert-content {
+    border: 1px solid $color-error;
+    padding: 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+
+    .alert-icon {
+        color: $color-error;
+        font-weight: bold;
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .alert-text {
+        font-size: 13px;
+        color: $color-error;
+    }
+}
+
+.a-alert-inline {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #000;
+    display: flex;
+    align-items: center;
+
+    i {
+        color: #008296;
+        font-style: normal;
+        font-weight: bold;
+        margin-right: 4px;
+        font-family: serif;
+        font-size: 14px;
+    }
+
+    &.error-text {
+        color: $color-error;
+        i { color: $color-error; }
+    }
+}
+
+// ==========================================
+// 4. BIỂU MẪU (FORMS)
+// ==========================================
+.a-input-text-group {
+    margin-bottom: 14px;
+}
+
+.password-label-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.a-form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.a-input-text {
+    width: 100%;
+    padding: 3px 7px;
+    border: 1px solid $color-input-border;
+    border-top-color: #949494;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 0 rgba(0, 0, 0, 0.07) inset;
+    outline: 0;
+    height: 31px;
+    box-sizing: border-box;
+    font-size: 13px;
+
+    &:focus {
+        border-color: $color-input-focus;
+        box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+    }
+}
+
+// ==========================================
+// 5. NÚT BẤM (BUTTONS)
+// ==========================================
+%button-base {
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    height: 31px;
+    font-size: 13px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.a-button-primary {
+    @extend %button-base;
+    width: 100%;
+    background: $color-btn-primary;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    margin-top: 8px;
+    margin-bottom: 14px;
+
+    &:hover:not(:disabled) {
+        background: $color-btn-primary-hover;
+    }
+
+    &:disabled {
+        background: #e3e3e3;
+        border-color: $color-input-border;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+.a-button-secondary {
+    @extend %button-base;
+    width: 350px;
+    background: $color-btn-secondary;
+    border-color: #adb1b8 #a2a6ac #8d9096;
+    padding: 0;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+
+    &:hover {
+        background: $color-btn-secondary-hover;
+    }
+}
+
+// ==========================================
+// 6. LIÊN KẾT & VĂN BẢN KHÁC
+// ==========================================
+.a-link-normal {
+    color: $color-link;
+    text-decoration: none;
+    font-size: 13px;
+
+    &:hover {
+        color: $color-link-hover;
+        text-decoration: underline;
+    }
+}
+
+.terms-text {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 14px;
+}
+
+.already-have-account {
+    font-size: 13px;
+    margin: 0;
+
+    .arrow {
+        color: #555;
+        margin-left: 2px;
+    }
+}
+
+// ==========================================
+// 7. ĐƯỜNG CHIA CẮT (DIVIDER)
+// ==========================================
+.a-divider-break {
+    margin-top: 22px;
+    margin-bottom: 14px;
+    border-top: 1px solid transparent;
+    background: linear-gradient(to right, transparent, #e7e7e7, transparent);
+    height: 1px;
+    text-align: center;
+    position: relative;
+
+    h5 {
+        line-height: 1;
+        font-size: 12px;
+        color: $color-text-muted;
+        font-weight: 400;
+        z-index: 2;
+        position: relative;
+        display: inline-block;
+        background-color: $color-white;
+        padding: 0 8px;
+        margin: 0;
+        top: -8px;
+    }
+}

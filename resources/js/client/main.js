@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import router from './router';
 import App from './App.vue';
 import '../bootstrap';
+import { useAuthStore } from './stores/auth';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -10,5 +11,10 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 
-app.mount('#client-app');
+const authStore = useAuthStore(pinia);
 
+authStore.setupListeners();
+
+authStore.silentRefresh().finally(() => {
+    app.mount('#client-app');
+});

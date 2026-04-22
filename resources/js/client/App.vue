@@ -1,11 +1,5 @@
 <template>
     <div>
-        <header>
-            <h1>E-commerce Client SPA</h1>
-            <nav>
-                <router-link to="/">Home</router-link>
-            </nav>
-        </header>
         <main>
             <router-view> </router-view>
         </main>

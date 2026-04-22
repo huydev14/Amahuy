@@ -91,6 +91,6 @@ Route::prefix('admin')->middleware('jwt.cookie')->group(function () {
 });
 
 // VueJS client
-Route::get('/client/{any?}', function() {
+Route::get('/{any?}', function() {
     return view('client.index');
 })->where('any', '.*');

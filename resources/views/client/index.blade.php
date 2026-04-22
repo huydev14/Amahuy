@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Storefront</title>
+    <title>Amahuy</title>
 
     @vite(['resources/js/client/main.js'])
 </head>
