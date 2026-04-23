@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Amahuy</title>
+    <title>Amazon</title>
 
-    @vite(['resources/js/client/main.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/client/main.js'])
 </head>
 <body>
     <div id="client-app"></div>

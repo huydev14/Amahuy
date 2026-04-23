@@ -5,7 +5,7 @@
             <a href="#">Thông báo Bảo mật</a>
             <a href="#">Trợ giúp</a>
         </div>
-        <p class="footer-copyright">© 2024-2026, Amahuy.com, Inc. hoặc các chi nhánh của nó</p>
+        <p class="footer-copyright">© 2024-2026, Amazon.com, Inc. hoặc các chi nhánh của nó</p>
     </footer>
 </template>
 

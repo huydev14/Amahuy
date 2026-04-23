@@ -2,7 +2,7 @@
     <div class="amazon-login-container">
         <div class="logo-container">
             <router-link to="/client" class="logo-link">
-                <span class="logo-text">Amahuy</span>
+                <span class="logo-text">Amazon</span>
             </router-link>
         </div>
 
@@ -19,7 +19,7 @@
             <div class="a-divider-inner">
                 <p class="terms-text">
                     Bằng cách {{ actionText }}, bạn đồng ý với <a href="#" class="a-link-normal">Điều kiện sử dụng</a> và
-                    <a href="#" class="a-link-normal">Thông báo bảo mật</a> của Amahuy.
+                    <a href="#" class="a-link-normal">Thông báo bảo mật</a> của Amazon.
                 </p>
             </div>
 
@@ -34,7 +34,6 @@
 import AuthFooter from '@client/components/AuthFooter.vue';
 import '@scss/client/auth.scss';
 
-// Nhận dữ liệu từ trang con truyền vào
 defineProps({
     title: {
         type: String,
@@ -50,5 +49,3 @@ defineProps({
     },
 });
 </script>
-
-

@@ -1,8 +1,3 @@
-/* resources/css/client/auth.scss */
-
-// ==========================================
-// 1. BIẾN (VARIABLES)
-// ==========================================
 $font-family-base: 'Amazon Ember', Arial, sans-serif;
 $color-text-main: #0f1111;
 $color-text-muted: #767676;
@@ -20,12 +15,10 @@ $color-btn-secondary-hover: #d3d6db;
 $color-input-border: #a6a6a6;
 $color-input-focus: #e77600;
 
-// ==========================================
-// 2. LAYOUT & TYPOGRAPHY
-// ==========================================
 .amazon-login-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     background-color: $color-white;
     min-height: 100vh;
@@ -64,9 +57,6 @@ $color-input-focus: #e77600;
     margin-top: 0;
 }
 
-// ==========================================
-// 3. THÔNG BÁO LỖI (ALERTS)
-// ==========================================
 .a-alert-content {
     border: 1px solid $color-error;
     padding: 14px;
@@ -95,24 +85,12 @@ $color-input-focus: #e77600;
     display: flex;
     align-items: center;
 
-    i {
-        color: #008296;
-        font-style: normal;
-        font-weight: bold;
-        margin-right: 4px;
-        font-family: serif;
-        font-size: 14px;
-    }
-
     &.error-text {
         color: $color-error;
         i { color: $color-error; }
     }
 }
 
-// ==========================================
-// 4. BIỂU MẪU (FORMS)
-// ==========================================
 .a-input-text-group {
     margin-bottom: 14px;
 }
@@ -148,9 +126,6 @@ $color-input-focus: #e77600;
     }
 }
 
-// ==========================================
-// 5. NÚT BẤM (BUTTONS)
-// ==========================================
 %button-base {
     border-radius: 8px;
     border-style: solid;
@@ -184,7 +159,7 @@ $color-input-focus: #e77600;
 
 .a-button-secondary {
     @extend %button-base;
-    width: 350px;
+    width: 100%;
     background: $color-btn-secondary;
     border-color: #adb1b8 #a2a6ac #8d9096;
     padding: 0;
@@ -195,9 +170,6 @@ $color-input-focus: #e77600;
     }
 }
 
-// ==========================================
-// 6. LIÊN KẾT & VĂN BẢN KHÁC
-// ==========================================
 .a-link-normal {
     color: $color-link;
     text-decoration: none;
@@ -225,9 +197,6 @@ $color-input-focus: #e77600;
     }
 }
 
-// ==========================================
-// 7. ĐƯỜNG CHIA CẮT (DIVIDER)
-// ==========================================
 .a-divider-break {
     margin-top: 22px;
     margin-bottom: 14px;
@@ -251,3 +220,64 @@ $color-input-focus: #e77600;
         top: -8px;
     }
 }
+
+.verify-otp-page {
+    .verify-instruction {
+        margin-bottom: 18px;
+        font-size: 13px;
+        line-height: 1.5;
+
+        p {
+            margin: 0 0 4px 0;
+        }
+    }
+
+    .email-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .change-email-link {
+        font-size: 12px;
+    }
+
+    .otp-input {
+        letter-spacing: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .resend-section {
+        width: 100%;
+    }
+
+    .resend-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .resend-text {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .success-text {
+        color: #008a00;
+
+        i {
+            color: #008a00;
+        }
+    }
+
+    .disabled {
+        color: #767676 !important;
+        text-decoration: none !important;
+        cursor: not-allowed;
+    }
+}
+
