@@ -22,6 +22,9 @@ class SocialAccountController extends Controller
 
     public function callback(Request $request, $provider)
     {
+        if ($request->has('error') || !$request->has('code')) {
+            return view('auth.callback', ['error' => 'Từ chối truy cập hoặc lỗi từ ' . $provider]);
+        }
         try {
             $state = $request->input('state');
             parse_str($state, $stateParams);
@@ -70,6 +73,7 @@ class SocialAccountController extends Controller
                 'user' => $user
             ]);
         } catch (\Exception $e) {
+            \Log::error('Social login error: ', ['provider' => $provider, 'error' => $e->getMessage()]);
             return view('auth.callback', [
                 'error' => 'Đăng nhập thất bại: ' . $e->getMessage()
             ]);

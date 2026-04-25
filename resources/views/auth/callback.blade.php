@@ -8,9 +8,13 @@
             user: {!! isset($user) ? json_encode($user) : 'null' !!},
             error: "{{ $error ?? '' }}"
         };
+        if (window.opener) {
+            window.opener.postMessage(payload, "*");
 
-        window.opener.postMessage(payload, "http://localhost:5173");
-        window.close();
+            setTimeout(() => {
+                window.close();
+            }, 100);
+        }
     </script>
 </body>
 </html>

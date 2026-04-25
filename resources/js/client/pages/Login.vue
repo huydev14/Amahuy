@@ -173,8 +173,6 @@ const loginWithSocial = (provider) => {
     window.open(url, "SocialLogin", `width=${width},height=${height},top=${top},left=${left}`);
 
     const handleMessage = (event) => {
-        if (event.origin !== "http://127.0.0.1:8000") return;
-
         const { token, user, error } = event.data;
 
         if (token) {
