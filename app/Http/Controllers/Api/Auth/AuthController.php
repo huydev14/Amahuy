@@ -210,6 +210,18 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            $payload = $this->guard()->setToken($refreshToken)->getPayload();
+            $customerId = $payload->get('sub');
+
+            //Check if customer still exists
+            $customer = Customer::find($customerId);
+            if (!$customer) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Người dùng không còn tồn tại.'
+                ], 401);
+            }
+
             // Validate and refresh token
             $newToken = $this->guard()->setToken($refreshToken)->refresh();
 
