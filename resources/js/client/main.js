@@ -12,6 +12,7 @@ app.use(pinia);
 
 const authStore = useAuthStore();
 authStore.setupWatcher();
+await authStore.bootstrapAuth();
 
 app.use(router);
 app.mount('#client-app');

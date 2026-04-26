@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     actions: {
+        //Watch changes in the auth state and sync to LocalStorage
         setupWatcher() {
             this.$subscribe(
                 (mutation, state) => {
@@ -35,6 +36,21 @@ export const useAuthStore = defineStore('auth', {
                 },
             );
         },
+
+        //Try to restore auth state on app startup
+        async bootstrapAuth() {
+            if (this.token) {
+                return true;
+            }
+            //If don't have token, try to refresh it
+            const refreshed = await this.silentRefresh();
+            if (!refreshed) {
+                this.user = null;
+            }
+            return refreshed;
+        },
+
+        //Login with credentials and store token/user on success
         async login(credentials) {
             const response = await api.post('/login', credentials);
             if (response.data.success) {
@@ -62,26 +78,17 @@ export const useAuthStore = defineStore('auth', {
 
                 return true;
             } catch (error) {
-                this.forceLogout();
+                this.user = null;
+                this.token = null;
                 return false;
             }
         },
-
         async logout() {
             try {
                 await api.post('/logout');
             } finally {
-                this.forceLogout();
-                router.push({ name: 'Login' });
-            }
-        },
-
-        forceLogout() {
-            this.user = null;
-            this.token = null;
-
-            if (router.currentRoute.value.name !== 'Login') {
-                router.push({ name: 'Login' });
+                this.user = null;
+                this.token = null;
             }
         },
     },
